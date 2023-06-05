@@ -17,11 +17,11 @@ class RoomDetailsPage extends StatelessWidget {
     final products = productService.getAllProducts().where((product) => product.location == room.name).toList();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         backgroundColor: DemirBasimTheme.of(context).alternate,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddItems()));
-        }
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddItems()));
+        },
+        child: const Icon(Icons.add)
       ),
       appBar: Demirbas.appbars(context, room.name),
       body: ListView.builder(

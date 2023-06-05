@@ -13,9 +13,9 @@ class CustomDrawer extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text('Ercan Yiğit'),
-              accountEmail: Text('ercanyt@gmail.com'),
-              currentAccountPicture: CircleAvatar(
+              accountName: const Text('Ercan Yiğit'),
+              accountEmail: const Text('ercanyt@gmail.com'),
+              currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage('assets/siyah1.png'),
               ),
               decoration: BoxDecoration(
@@ -23,30 +23,30 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
+              leading: const Icon(Icons.home),
+              title: const Text('Home'),
               onTap: () {
                 // Handle drawer item tap
               },
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
+              leading: const Icon(Icons.person),
+              title: const Text('Profile'),
               onTap: () {
                 // Handle drawer item tap
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
               onTap: () {
                 // Handle drawer item tap
               },
             ),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'),
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
               onTap: () {
                 // Handle drawer item tap
               },
