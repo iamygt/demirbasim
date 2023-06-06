@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "896529393110",
+    "project_id": "demirbasim",
+    "storage_bucket": "demirbasim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896529393110:android:7df0ffbe283065e1023077",
+        "android_client_info": {
+          "package_name": "com.example.demirbasim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "896529393110-q7sigs4l63mt0if1d8d8842ok8cm5m0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaTXBloeH3A-48djidK_Xy6eWry_rXr7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "896529393110-o9v5eilflirak3ff83u8tubqptcjvgva.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "896529393110-qnfi6unrgkqo0070nerl8u1fjn8q0113.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demirbasim"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

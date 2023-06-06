@@ -1,9 +1,10 @@
-import 'package:demirbasim/service/room_service.dart';
+import 'package:demirbasim/models/firebase_room_model.dart';
+import 'package:demirbasim/service/firebase_service_room.dart';
 import 'package:demirbasim/theme/all_theme.dart';
 import 'package:demirbasim/widgets/appbars.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:demirbasim/models/room_model.dart';
 import 'dart:io';
 
 import 'package:provider/provider.dart';
@@ -18,14 +19,14 @@ class AddRoomPage extends StatefulWidget {
 
 class _AddRoomPageState extends State<AddRoomPage> {
   final roomNameController = TextEditingController();
-  late RoomService roomService; // RoomService object defined here
+  late RoomServiceFirebase roomService; // RoomService object defined here
 
   File? _selectedImage;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    roomService = Provider.of<RoomService>(context, listen: false); // We are calling the provider here
+    roomService = Provider.of<RoomServiceFirebase>(context, listen: false); // We are calling the provider here
   }
 
   @override
@@ -38,7 +39,7 @@ class _AddRoomPageState extends State<AddRoomPage> {
           children: <Widget>[
             // Here is the image picker
             ElevatedButton(
-               style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: DemirBasimTheme.of(context).alternate,
               ),
               onPressed: () async {
@@ -65,13 +66,19 @@ class _AddRoomPageState extends State<AddRoomPage> {
               child: const Text('Ekle'),
               onPressed: () {
                 if (roomNameController.text != '' && _selectedImage != null) {
-                  Room newRoom = Room(
+                  RoomModelFireBase newRoom = RoomModelFireBase(
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     name: roomNameController.text,
-                    imagePath: _selectedImage!.path,
+                    imageUrl: _selectedImage!.path,
                   );
-                  roomService.addRoom(newRoom);
-                  Navigator.pop(context, newRoom); // Here we are sending back the new room
+                  roomService.addRoom(newRoom, _selectedImage!).then((value) {
+                    roomService.fetchRooms(); // Odaları yeniden getir
+                    Navigator.pop(context, newRoom); // Burada yeni odayı geri gönderiyoruz
+                  }).catchError((error) {
+                    if (kDebugMode) {
+                      print("Error adding room: $error");
+                    }
+                  });
                 }
               },
             ),

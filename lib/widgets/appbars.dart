@@ -1,10 +1,14 @@
-import 'package:demirbasim/controllers/search.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demirbasim/service/firebase_service_product.dart';
+import 'package:demirbasim/service/firebase_service_room.dart';
 import 'package:demirbasim/theme/all_theme.dart';
-import 'package:flutter/foundation.dart';
+import 'package:demirbasim/utils/search_page.dart';
 import 'package:flutter/material.dart';
 
 class Demirbas {
-  static appbars(BuildContext context, String title) {
+  static final firestore = FirebaseFirestore.instance;
+
+  static AppBar appbars(BuildContext context, String title) {
     return AppBar(
       centerTitle: true,
       title: Text(
@@ -23,15 +27,15 @@ class Demirbas {
             size: 30,
           ),
           onPressed: () {
-            var dataSearch = DataSearch([]);
-            // Fetch global data
-            List<String> globalData = dataSearch.fetchGlobalData(context);
-            // Initialize DataSearch with global data
-            showSearch(context: context, delegate: DataSearch(globalData));
-            if (kDebugMode) {
-              print('IconButton pressed ...');
-            }
-          },
+  showSearch(
+    context: context,
+    delegate: SearchPage(
+      productService: ProductServiceFirebase(),
+      roomService: RoomServiceFirebase(), allRooms: [],
+    ),
+  );
+},
+
         ),
       ],
       backgroundColor: DemirBasimTheme.of(context).alternate,

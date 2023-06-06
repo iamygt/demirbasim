@@ -1,5 +1,5 @@
-import 'package:demirbasim/models/room_model.dart';
-import 'package:demirbasim/service/room_service.dart';
+import 'package:demirbasim/models/firebase_room_model.dart';
+import 'package:demirbasim/service/firebase_service_room.dart';
 import 'package:demirbasim/theme/all_theme.dart';
 import 'package:demirbasim/view/add_room.dart';
 import 'package:demirbasim/view/room_details.dart';
@@ -10,14 +10,13 @@ class RoomsPage extends StatefulWidget {
   const RoomsPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _RoomsPageState createState() => _RoomsPageState();
+  RoomsPageState createState() => RoomsPageState();
 }
 
-class _RoomsPageState extends State<RoomsPage> {
-  final roomService = RoomService();
+class RoomsPageState extends State<RoomsPage> {
+  final RoomServiceFirebase roomService = RoomServiceFirebase();
 
-  void deleteRoom(Room room) {
+  void deleteRoom(RoomModelFireBase room) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -45,31 +44,41 @@ class _RoomsPageState extends State<RoomsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Demirbas.appbars(context, 'Odalar'),
-  
-      body: ListView.builder(
-        itemCount: roomService.rooms.length,
-        itemBuilder: (context, index) {
-          final room = roomService.rooms[index];
-
-          return ListTile(
-            title: Text(room.name, style: const TextStyle(fontSize: 22)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RoomDetailsPage(room: room)),
-              );
-            },
-            trailing: IconButton(
-              icon: const Icon(Icons.delete, color: Colors.black),
-              onPressed: () => deleteRoom(room), // Call the deleteRoom method
-            ),
-          );
+      body: FutureBuilder<List<RoomModelFireBase>>(
+        future: roomService.getRooms(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final rooms = snapshot.data!;
+            return ListView.builder(
+              itemCount: rooms.length,
+              itemBuilder: (context, index) {
+                final room = rooms[index];
+                return ListTile(
+                  title: Text(room.name, style: const TextStyle(fontSize: 22)),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RoomDetailsPage(room: room)),
+                    );
+                  },
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.black),
+                    onPressed: () => deleteRoom(room),
+                  ),
+                );
+              },
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: DemirBasimTheme.of(context).alternate,
         onPressed: () async {
-          final Room? newRoom = await Navigator.push(
+          final RoomModelFireBase? newRoom = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddRoomPage()),
           );
